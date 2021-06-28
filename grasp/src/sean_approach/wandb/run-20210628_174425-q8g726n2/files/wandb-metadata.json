@@ -1,0 +1,24 @@
+{
+    "os": "Linux-5.4.0-74-generic-x86_64-with-Ubuntu-18.04-bionic",
+    "python": "3.6.9",
+    "heartbeatAt": "2021-06-28T09:44:28.414676",
+    "startedAt": "2021-06-28T09:44:25.810165",
+    "docker": null,
+    "gpu": "GeForce RTX 2070",
+    "gpu_count": 1,
+    "cpu_count": 6,
+    "cuda": "10.2.89",
+    "args": [],
+    "state": "running",
+    "program": "offline.py",
+    "codePath": "grasp/src/sean_approach/offline.py",
+    "git": {
+        "remote": "https://github.com/austin2408/Grasp_drl.git",
+        "commit": "f659e92451f3cd235394b3dc50b581118fd885c5"
+    },
+    "email": "sdnd93612@gmail.com",
+    "root": "/home/austin/Grasp_drl",
+    "host": "austin",
+    "username": "austin",
+    "executable": "/usr/bin/python3"
+}

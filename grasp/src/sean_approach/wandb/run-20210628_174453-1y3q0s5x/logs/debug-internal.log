@@ -1,0 +1,41 @@
+2021-06-28 17:44:53,633 INFO    MainThread:8018 [internal.py:wandb_internal():91] W&B internal server running at pid: 8018, started at: 2021-06-28 17:44:53.632900
+2021-06-28 17:44:53,634 DEBUG   HandlerThread:8018 [handler.py:handle_request():121] handle_request: check_version
+2021-06-28 17:44:53,635 INFO    WriterThread:8018 [datastore.py:open_for_write():77] open: /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210628_174453-1y3q0s5x/run-1y3q0s5x.wandb
+2021-06-28 17:44:53,636 DEBUG   SenderThread:8018 [sender.py:send():173] send: header
+2021-06-28 17:44:53,636 DEBUG   SenderThread:8018 [sender.py:send_request():183] send_request: check_version
+2021-06-28 17:44:53,760 DEBUG   SenderThread:8018 [sender.py:send():173] send: run
+2021-06-28 17:44:53,994 DEBUG   HandlerThread:8018 [handler.py:handle_request():121] handle_request: run_start
+2021-06-28 17:44:53,996 INFO    SenderThread:8018 [sender.py:_start_run_threads():681] run started: 1y3q0s5x with start time 1624873493
+2021-06-28 17:44:53,996 DEBUG   SenderThread:8018 [sender.py:send():173] send: summary
+2021-06-28 17:44:53,997 INFO    SenderThread:8018 [sender.py:_save_file():808] saving file wandb-summary.json with policy end
+2021-06-28 17:44:55,292 DEBUG   HandlerThread:8018 [meta.py:__init__():39] meta init
+2021-06-28 17:44:55,292 DEBUG   HandlerThread:8018 [meta.py:__init__():53] meta init done
+2021-06-28 17:44:55,292 DEBUG   HandlerThread:8018 [meta.py:probe():210] probe
+2021-06-28 17:44:55,298 DEBUG   HandlerThread:8018 [meta.py:_setup_git():200] setup git
+2021-06-28 17:44:55,315 DEBUG   HandlerThread:8018 [meta.py:_setup_git():207] setup git done
+2021-06-28 17:44:55,315 DEBUG   HandlerThread:8018 [meta.py:_save_code():89] save code
+2021-06-28 17:44:55,323 DEBUG   HandlerThread:8018 [meta.py:_save_code():110] save code done
+2021-06-28 17:44:55,323 DEBUG   HandlerThread:8018 [meta.py:_save_patches():127] save patches
+2021-06-28 17:44:55,361 DEBUG   HandlerThread:8018 [meta.py:_save_patches():169] save patches done
+2021-06-28 17:44:55,361 DEBUG   HandlerThread:8018 [meta.py:_save_pip():57] save pip
+2021-06-28 17:44:55,361 DEBUG   HandlerThread:8018 [meta.py:_save_pip():71] save pip done
+2021-06-28 17:44:55,362 DEBUG   HandlerThread:8018 [meta.py:probe():252] probe done
+2021-06-28 17:44:55,363 DEBUG   SenderThread:8018 [sender.py:send():173] send: files
+2021-06-28 17:44:55,364 INFO    SenderThread:8018 [sender.py:_save_file():808] saving file wandb-metadata.json with policy now
+2021-06-28 17:44:55,364 INFO    SenderThread:8018 [sender.py:_save_file():808] saving file code/grasp/src/sean_approach/offline.py with policy now
+2021-06-28 17:44:55,370 DEBUG   HandlerThread:8018 [handler.py:handle_request():121] handle_request: stop_status
+2021-06-28 17:44:55,370 DEBUG   SenderThread:8018 [sender.py:send_request():183] send_request: stop_status
+2021-06-28 17:44:55,568 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:55,799 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:56,012 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:56,221 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:56,439 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:56,672 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:44:56,885 DEBUG   SenderThread:8018 [sender.py:send():173] send: config
+2021-06-28 17:45:04,472 WARNING MainThread:8018 [internal.py:wandb_internal():146] Internal process interrupt: 1
+2021-06-28 17:45:04,734 WARNING MainThread:8018 [internal.py:wandb_internal():146] Internal process interrupt: 2
+2021-06-28 17:45:04,734 ERROR   MainThread:8018 [internal.py:wandb_internal():149] Internal process interrupted.
+2021-06-28 17:45:05,392 INFO    SenderThread:8018 [sender.py:finish():912] shutting down sender
+2021-06-28 17:45:05,395 INFO    HandlerThread:8018 [handler.py:finish():629] shutting down handler
+2021-06-28 17:45:05,609 INFO    WriterThread:8018 [datastore.py:close():258] close: /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210628_174453-1y3q0s5x/run-1y3q0s5x.wandb
+2021-06-28 17:45:07,195 INFO    MainThread:8018 [internal.py:handle_exit():78] Internal process exited

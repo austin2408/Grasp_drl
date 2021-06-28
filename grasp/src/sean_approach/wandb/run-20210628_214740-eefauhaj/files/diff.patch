@@ -1,0 +1,99 @@
+diff --git a/grasp/src/image2hdf5.py b/grasp/src/image2hdf5.py
+index 72d9274..94a6406 100644
+--- a/grasp/src/image2hdf5.py
++++ b/grasp/src/image2hdf5.py
+@@ -120,42 +120,42 @@ def logger(path):
+ 
+ logger(Path)
+ print('done')
+-f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
+-print(f.keys())
+-group = f['iter_486']
+-for key in group.keys():
+-    print(key)
+-print('========================')
+-print(group['state'])
+-print(group['action'])
+-print(group['reward'])
+-print(group['next_state'])
+-print('========================')
+-for key in group['next_state']:
+-    print(key)
+-
+-color = f['iter_486/state/color'].value
+-depth = f['iter_486/state/depth'].value
+-colorn = f['iter_486/next_state/color'].value
+-depthn = f['iter_486/next_state/depth'].value
+-
+-# use the created array to output your multiple images. In this case I have stacked 4 images vertically
+-print('========================')
+-print(group['next_state/empty'])
+-em = group['next_state/empty']
+-print(em.value)
+-print(color.shape)
+-print(depth.shape)
+-action = group['action']
+-reward = group['reward']
+-theta = group['origin_theta']
+-print(action.value)
+-print(reward.value)
+-print(theta.value)
+-
+-_, axarr = plt.subplots(2,2) 
+-axarr[0][0].imshow(color)
+-axarr[0][1].imshow(depth)
+-axarr[1][0].imshow(colorn)
+-axarr[1][1].imshow(depthn)
+-plt.show()
++# f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
++# print(f.keys())
++# group = f['iter_486']
++# for key in group.keys():
++#     print(key)
++# print('========================')
++# print(group['state'])
++# print(group['action'])
++# print(group['reward'])
++# print(group['next_state'])
++# print('========================')
++# for key in group['next_state']:
++#     print(key)
++
++# color = f['iter_486/state/color'].value
++# depth = f['iter_486/state/depth'].value
++# colorn = f['iter_486/next_state/color'].value
++# depthn = f['iter_486/next_state/depth'].value
++
++# # use the created array to output your multiple images. In this case I have stacked 4 images vertically
++# print('========================')
++# print(group['next_state/empty'])
++# em = group['next_state/empty']
++# print(em.value)
++# print(color.shape)
++# print(depth.shape)
++# action = group['action']
++# reward = group['reward']
++# theta = group['origin_theta']
++# print(action.value)
++# print(reward.value)
++# print(theta.value)
++
++# _, axarr = plt.subplots(2,2) 
++# axarr[0][0].imshow(color)
++# axarr[0][1].imshow(depth)
++# axarr[1][0].imshow(colorn)
++# axarr[1][1].imshow(depthn)
++# plt.show()
+diff --git a/grasp/src/sean_approach/train.py b/grasp/src/sean_approach/train.py
+index 7c3f293..23cc2e3 100644
+--- a/grasp/src/sean_approach/train.py
++++ b/grasp/src/sean_approach/train.py
+@@ -10,7 +10,7 @@ import gdown
+ from matplotlib import pyplot as plt
+ from zipfile import ZipFile
+ import time
+-from trainer import Trainer
++from trainer2 import Trainer
+ from prioritized_memory import Memory
+ from collections import namedtuple
+ 

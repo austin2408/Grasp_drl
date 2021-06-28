@@ -1,0 +1,13 @@
+diff --git a/grasp/src/sean_approach/train.py b/grasp/src/sean_approach/train.py
+index 7c3f293..23cc2e3 100644
+--- a/grasp/src/sean_approach/train.py
++++ b/grasp/src/sean_approach/train.py
+@@ -10,7 +10,7 @@ import gdown
+ from matplotlib import pyplot as plt
+ from zipfile import ZipFile
+ import time
+-from trainer import Trainer
++from trainer2 import Trainer
+ from prioritized_memory import Memory
+ from collections import namedtuple
+ 

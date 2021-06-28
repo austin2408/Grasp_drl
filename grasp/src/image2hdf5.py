@@ -120,42 +120,42 @@ def logger(path):
 
 logger(Path)
 print('done')
-f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
-print(f.keys())
-group = f['iter_486']
-for key in group.keys():
-    print(key)
-print('========================')
-print(group['state'])
-print(group['action'])
-print(group['reward'])
-print(group['next_state'])
-print('========================')
-for key in group['next_state']:
-    print(key)
+# f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
+# print(f.keys())
+# group = f['iter_486']
+# for key in group.keys():
+#     print(key)
+# print('========================')
+# print(group['state'])
+# print(group['action'])
+# print(group['reward'])
+# print(group['next_state'])
+# print('========================')
+# for key in group['next_state']:
+#     print(key)
 
-color = f['iter_486/state/color'].value
-depth = f['iter_486/state/depth'].value
-colorn = f['iter_486/next_state/color'].value
-depthn = f['iter_486/next_state/depth'].value
+# color = f['iter_486/state/color'].value
+# depth = f['iter_486/state/depth'].value
+# colorn = f['iter_486/next_state/color'].value
+# depthn = f['iter_486/next_state/depth'].value
 
-# use the created array to output your multiple images. In this case I have stacked 4 images vertically
-print('========================')
-print(group['next_state/empty'])
-em = group['next_state/empty']
-print(em.value)
-print(color.shape)
-print(depth.shape)
-action = group['action']
-reward = group['reward']
-theta = group['origin_theta']
-print(action.value)
-print(reward.value)
-print(theta.value)
+# # use the created array to output your multiple images. In this case I have stacked 4 images vertically
+# print('========================')
+# print(group['next_state/empty'])
+# em = group['next_state/empty']
+# print(em.value)
+# print(color.shape)
+# print(depth.shape)
+# action = group['action']
+# reward = group['reward']
+# theta = group['origin_theta']
+# print(action.value)
+# print(reward.value)
+# print(theta.value)
 
-_, axarr = plt.subplots(2,2) 
-axarr[0][0].imshow(color)
-axarr[0][1].imshow(depth)
-axarr[1][0].imshow(colorn)
-axarr[1][1].imshow(depthn)
-plt.show()
+# _, axarr = plt.subplots(2,2) 
+# axarr[0][0].imshow(color)
+# axarr[0][1].imshow(depth)
+# axarr[1][0].imshow(colorn)
+# axarr[1][1].imshow(depthn)
+# plt.show()
