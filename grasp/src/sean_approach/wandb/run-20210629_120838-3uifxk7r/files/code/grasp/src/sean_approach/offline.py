@@ -24,7 +24,7 @@ class Option():
         parser.add_argument("--save_freq", type=int, default=10, help="Every how many update should save the model, default is 5")
         parser.add_argument("--updating_freq", type=int, default=10, help="Frequency for updating target network, default is 6") # C
         parser.add_argument("--iteration", type=int, default=500, help="The train iteration, default is 30") # M
-        parser.add_argument("--memory_size", type=int, default=None, help="The memory size, default is None")
+        parser.add_argument("--memory_size", type=int, default=1328, help="The memory size, default is None")
         parser.add_argument("--discount_factor", type=float, default=0.9, help="The memory size, default is None")
         # parser.add_argument("gripper_memory", type=str, default=None, help="The pkl file for save experience")
 
@@ -62,11 +62,13 @@ def get_action_info(pixel_index):
 
 class Offline_training():
     def __init__(self, args):
+        
+        self.gripper_memory = Memory(args.memory_size)
+
         hdf5_path = '/home/austin/DataSet/grasp_drl/logger.hdf5'
         f = h5py.File(hdf5_path, "r")
-        args.memory_size = len(f.keys())
 
-        self.gripper_memory = Memory(args.memory_size)
+        
 
         for key in f.keys():
             group = f[key]
@@ -108,6 +110,7 @@ class Offline_training():
     def training(self, args):
         print('Start training ...')
         for i in range(args.iteration):
+            # print('Epoch : ', i)
             mini_batch = []
             idxs = []
             is_weight = []
@@ -115,6 +118,11 @@ class Offline_training():
             loss_list = []
 
             _mini_batch, _idxs, _is_weight = sample_data(self.gripper_memory, args.mini_batch_size);   mini_batch += _mini_batch; idxs += _idxs; is_weight += list(_is_weight)
+
+            # _mini_batch, _idxs, _is_weight = sample_data(self.gripper_memory, args.mini_batch_size)
+            # mini_batch += _mini_batch
+            # idxs += _idxs
+            # is_weight += list(_is_weight)
 
             for j in range(len(mini_batch)):
                 color = mini_batch[j].color
@@ -150,6 +158,12 @@ class Offline_training():
 
             if (i+1) % args.updating_freq == 0:
                 self.trainer.target_net.load_state_dict(self.trainer.behavior_net.state_dict())
+
+            # if (i+1) == args.iteration:
+            #     artifact = wandb.Artifact('model', type='model')
+            #     artifact.add_file(os.path.join(os.path.join(self.weight_path, "behavior_{}.pth".format(i+1))))
+            #     self.run.log_artifact(artifact)
+            #     self.run.join()
             
             print('Epoch : ', i, ' | Loss : ', sum(loss_list)/len(loss_list))
             wandb.log({"loss mean": np.mean(loss_list)})

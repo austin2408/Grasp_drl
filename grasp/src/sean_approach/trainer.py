@@ -48,6 +48,11 @@ class Trainer():
                                           {'params': self.behavior_net.grasp_depth_feat_extractor.parameters(), 'lr': args.densenet_lr},
                                           ], lr = args.learning_rate, momentum = 0.9, weight_decay = 2e-5)
 
+        # self.optimizer = torch.optim.Adam([{'params': self.behavior_net.grasp_net.parameters(), 'lr': args.learning_rate},
+        #                                   {'params': self.behavior_net.grasp_color_feat_extractor.parameters(), 'lr': args.densenet_lr}, 
+        #                                   {'params': self.behavior_net.grasp_depth_feat_extractor.parameters(), 'lr': args.densenet_lr},
+        #                                   ], lr = args.learning_rate, weight_decay = 2e-5)
+
         # load model if need 
         if(args.load_model != None):
             artifact = run.use_artifact(args.load_model, type='model')

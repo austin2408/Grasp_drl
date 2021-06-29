@@ -8,17 +8,23 @@ import cv2
 import copy
 import h5py
 import random
+import argparse
 from matplotlib import pyplot as plt
 
 from model import reinforcement_net
 
-color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_500/rgb/rgb_500_0.jpg')
-depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_500/depth/depth_500_0.npy')
+parser = argparse.ArgumentParser(prog="Set up", description='This program for testing')
+parser.add_argument("--idx", type=int, default=0, help="Give eposide index")
+args = parser.parse_args()
+
+num = str(args.idx)
+color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
 size = color.shape[0]
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_500.pth"
+model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_500_0.0016054634004831314.pth"
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 
@@ -66,22 +72,20 @@ color_tensor, depth_tensor, pad = preprocessing(color, depth)
 color_tensor = color_tensor.cuda()
 depth_tensor = depth_tensor.cuda()
 prediction = net.forward(color_tensor, depth_tensor, is_volatile=True)
-print(type(prediction))
-print(type(prediction[2]))
-print(len(prediction))
+# print(type(prediction))
+# print(type(prediction[2]))
+# print(len(prediction))
 size = color.shape[0]
 s = color_tensor.shape[2]
 lower = int(pad/2)
 upper = int(s/2-pad/2)
-# prediction: list with length 6
+# prediction: list with length 4
 # | index | tool |
 # | --- | --- |
-# | 0 | small suction cup |
-# | 1 | medium suction cup |
-# | 2 | gripper with -90 deg |
-# | 3 | gripper with -45 deg |
-# | 4 | gripper with 0 deg |
-# | 5 | gripper with 45 deg |
+# | 0 | gripper with -90 deg |
+# | 1 | gripper with -45 deg |
+# | 2 | gripper with 0 deg |
+# | 3 | gripper with 45 deg |
 
 def vis_affordance(predictions):
 	tmp = np.copy(predictions)
@@ -99,58 +103,60 @@ def plot_figures(tool):
     tool_cmap = []
     tt = []
     i = 0
+    max_ = []
+    pos = []
     theta_ = [90, -45, 0, 45]
     for object in tool:
         tool_cmap_ = vis_affordance(object)
         combine_ = cv2.addWeighted(color, 1.0, tool_cmap_, 0.8, 0.0)
         best = np.where(object == np.max(object))
-        max = np.max(object)
+        maxx = np.max(object)
         u, v = best[1][0], best[0][0]
-        combine_ = cv2.circle(combine_, (u, v), 3, (255, 255, 255), 2)
+        pos.append([u, v])
+        combine_ = cv2.circle(combine_, (u, v), 3, (0, 0, 0), 2)
         tt_ = color.copy()
-        cv2.circle(tt_,(u, v), 5, (255, 0, 0), -1)
+        cv2.circle(tt_,(u, v), 5, (255, 255, 0), -1)
         tool_cmap.append(tool_cmap_)
         combine.append(combine_)
         tt.append(tt_)
-        print('angle : ', theta_[i], ' ',(u, v), ' max : ',max)
+        print('angle : ', theta_[i], ' ',(u, v), ' max : ',maxx)
+        max_.append(maxx)
         i += 1
 
-    # plt.figure()
+    Max = max(max_)
+    angle = theta_[max_.index(Max)]
+    positions = pos[max_.index(Max)]
     f, axarr = plt.subplots(4,4) 
+    plt.suptitle('Resurt : Angle : '+str(angle)+' Position : '+str(positions))
+    axarr[0][0].set_title('90')
     axarr[0][0].imshow(combine[0][:,:,::-1])
     axarr[0][1].imshow(tool_cmap[0][:,:,[2,1,0]])
     axarr[0][2].imshow(tt[0][:,:,[2,1,0]])
     axarr[0][3].imshow(depth)
 
+    axarr[1][0].set_title('-45')
     axarr[1][0].imshow(combine[1][:,:,::-1])
     axarr[1][1].imshow(tool_cmap[1][:,:,[2,1,0]])
     axarr[1][2].imshow(tt[1][:,:,[2,1,0]])
     axarr[1][3].imshow(depth)
 
+    axarr[2][0].set_title('0')
     axarr[2][0].imshow(combine[2][:,:,::-1])
     axarr[2][1].imshow(tool_cmap[2][:,:,[2,1,0]])
     axarr[2][2].imshow(tt[2][:,:,[2,1,0]])
     axarr[2][3].imshow(depth)
 
+    axarr[3][0].set_title('45')
     axarr[3][0].imshow(combine[3][:,:,::-1])
     axarr[3][1].imshow(tool_cmap[3][:,:,[2,1,0]])
     axarr[3][2].imshow(tt[3][:,:,[2,1,0]])
     axarr[3][3].imshow(depth)
-    # plt.savefig('/home/austin/DataSet/grasp_drl/0/image_'+str(theta_)+'.png', dpi=300)
-
-    # print('angle : ', theta_, ' ',(u, v), ' max : ',max)
+    plt.savefig('/home/austin/Grasp_drl/grasp/src/sean_approach/result/image_'+num+'.png', dpi=300)
     plt.show()
-# gripper with -90 deg
-tool_3 = prediction[0][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
-# plot_figures(tool_3, -90)
-# gripper with -45 deg
-tool_4 = prediction[1][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
-# plot_figures(tool_4, -45)
-# gripper with 0 deg
-tool_5 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
-# plot_figures(tool_5, 0)
-# gripper with 45 deg
-tool_6 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
-# plot_figures(tool_6, 45)
 
-plot_figures([tool_3, tool_4, tool_5, tool_6])
+tool_0 = prediction[0][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+tool_1 = prediction[1][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+tool_2 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+tool_3 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
+
+plot_figures([tool_0, tool_1, tool_2, tool_3])

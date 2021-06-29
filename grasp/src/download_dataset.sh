@@ -5,7 +5,7 @@ cwd=$PWD
 # rl forward
 echo -e "\e[93m download datasets logger.hdf5 \e[0m"
 # cd $cwd
-gdown --id 10bLNx4PXCJrWX4v_eDVBRUPr4_Zrhn9A
+gdown --id 1evy8paNNeGj_I5N78KrrOi4U_8rRmuIE
 
 # rl vae
 # echo -e "\e[93m download VAE model 0726_1557.pth \e[0m"

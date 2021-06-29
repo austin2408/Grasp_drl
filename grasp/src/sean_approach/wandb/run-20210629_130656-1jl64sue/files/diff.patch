@@ -1,0 +1,515 @@
+diff --git a/grasp/src/image2hdf5.py b/grasp/src/image2hdf5.py
+index 94a6406..64e403b 100644
+--- a/grasp/src/image2hdf5.py
++++ b/grasp/src/image2hdf5.py
+@@ -5,33 +5,45 @@ import numpy as np
+ import matplotlib.pyplot as plt
+ import os
+ import math
++import random
+ import json
+ 
+ Path = '/home/austin/DataSet/grasp_drl/datasets'
+-
++ratio = 1
++count = [0,0]
++
++# Divide origin angle into 4 categories
++# prediction: list with length 4
++# | index | tool |
++# | --- | --- |
++# | 0 | gripper with -90 deg |
++# | 1 | gripper with -45 deg |
++# | 2 | gripper with 0 deg |
++# | 3 | gripper with 45 deg |
+ def angle_class(theta_):
+     angle = [0, 45, 90, 135]
+-    if (theta_ >angle[0] -22.5) and (theta_ < angle[0] + 22.5):
+-        return 4
+-    if (theta_ > angle[1] - 22.5) and (theta_ < angle[1] + 22.5):
+-        return 5
+-    if (theta_ > angle[2] - 22.5) and (theta_ < angle[2] + 22.5):
++    if (theta_ >angle[0] -22.5) and (theta_ < angle[0] + 22.5): # 0 +- 22.5
+         return 2
+-    if (theta_ > angle[3] - 22.5) and (theta_ < angle[3] + 22.5):
++    if (theta_ > angle[1] - 22.5) and (theta_ < angle[1] + 22.5): # 45 +- 22.5
+         return 3
+-    if (theta_ > angle[3] + 22.5) and (theta_ < 180):
+-        return 4
++    if (theta_ > angle[2] - 22.5) and (theta_ < angle[2] + 22.5): # 90 +- 22.5
++        return 0
++    if (theta_ > angle[3] - 22.5) and (theta_ < angle[3] + 22.5): # 135 +- 22.5
++        return 1
++    if (theta_ > angle[3] + 22.5) and (theta_ < 180): # 180 - 180-22.5
++        return 2
+ 
+ 
+ def logger(path):
+     name_list = os.listdir(path)
+     with h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5','w') as f:
+         for name in name_list:
+-            # print(name)
+             num = name.split('_')[1]
+ 
+-            # Success transition
++            # ------------------------------Success transition------------------------------ #
+             g1=f.create_group("iter_"+num)
++
++            # Get gripper action from json file
+             with open(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.json',"r") as F:
+                 data = json.load(F)
+                 coord = data['shapes'][0]['points']
+@@ -50,112 +62,118 @@ def logger(path):
+                         theta = math.atan2(y_, x_)
+                         theta = int(math.degrees(theta))
+             
++            # Set action, reward, origin angle
+             a_t = angle_class(theta)
+             g1["reward"] = np.array([5])
+             g1["origin_theta"] = np.array([theta])
+             g1["action"] = np.array([a_t, int(y), int(x)])
+-            # print(name)
+             if (int(y)>224) or (int(x)>224):
+-                print(name)
+-                # break
++                print('The image shape in '+name+' is wrong !')
+ 
++            # Get state
+             g2 = g1.create_group("state")
+             color = cv2.imread(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+             color = color[:,:,[2,1,0]]
+             color = cv2.resize(color, (224,224))
+-            dset1 = g2.create_dataset('color', (224,224,3), data=color)
++            g2.create_dataset('color', (224,224,3), data=color)
+             depth = np.load(path+'/episode_'+num+'/depth/depth_'+num+'_0.npy')
+-            # print(depth)
+-            dset2 = g2.create_dataset('depth', (224,224), data=depth)
++            g2.create_dataset('depth', (224,224), data=depth)
+ 
++            # Get next state
+             g3 = g1.create_group("next_state")
+             color2 = cv2.imread(path+'/episode_'+num+'/rgb/rgb_'+num+'_1.jpg')
+             color2 = color2[:,:,[2,1,0]]
+             color2 = cv2.resize(color2, (224,224))
+-            dset3 = g3.create_dataset('color', (224,224,3), data=color2)
++            g3.create_dataset('color', (224,224,3), data=color2)
+             depth2 = np.load(path+'/episode_'+num+'/depth/depth_'+num+'_1.npy')
+-            dset4 = g3.create_dataset('depth', (224,224), data=depth2)
++            g3.create_dataset('depth', (224,224), data=depth2)
+             g3["empty"] = np.array([True])
++            count[0] += 1
+             
+-            # Fail transition
+-            g1=f.create_group("iter_"+num+"_2")
+-            with open(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.json',"r") as F:
+-                data = json.load(F)
+-                coord = data['shapes'][1]['points']
+-                if data['shapes'][0]['label'] == 'bad':
+-                    x = int((int(coord[0][0]) + int(coord[1][0]))/2)
+-                    y = int((int(coord[0][1]) + int(coord[1][1]))/2)
+-                    x_ = coord[0][0] - coord[1][0]
+-                    y_ = coord[0][1] - coord[1][1]
+-                    if y_ > 0:
+-                        x_ = -x_
+-                    y_ = abs(y_)
+-
+-                    if y_ < 0.001:
+-                        theta = 0
+-                    else:
+-                        theta = math.atan2(y_, x_)
+-                        theta = int(math.degrees(theta))
+-            
+-            a_t = angle_class(theta)
+-            g1["reward"] = np.array([-5])
+-            g1["origin_theta"] = np.array([theta])
+-            g1["action"] = np.array([a_t, int(y), int(x)])
+-
+-            g2 = g1.create_group("state")
+-            color = cv2.imread(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+-            color = color[:,:,[2,1,0]]
+-            color = cv2.resize(color, (224,224))
+-            dset1 = g2.create_dataset('color', (224,224,3), data=color)
+-            depth = np.load(path+'/episode_'+num+'/depth/depth_'+num+'_0.npy')
+-            # print(depth)
+-            dset2 = g2.create_dataset('depth', (224,224), data=depth)
+-
+-            g3 = g1.create_group("next_state")
+-            dset3 = g3.create_dataset('color', (224,224,3), data=color)
+-            dset4 = g3.create_dataset('depth', (224,224), data=depth)
+-            g3["empty"] = np.array([False])
++            # ------------------------------Fail transition------------------------------ #
++            Do = True if random.random() < ratio else False
++            if Do:
++                g1=f.create_group("iter_"+num+"_2")
++                with open(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.json',"r") as F:
++                    data = json.load(F)
++                    coord = data['shapes'][1]['points']
++                    if data['shapes'][0]['label'] == 'bad':
++                        x = int((int(coord[0][0]) + int(coord[1][0]))/2)
++                        y = int((int(coord[0][1]) + int(coord[1][1]))/2)
++                        x_ = coord[0][0] - coord[1][0]
++                        y_ = coord[0][1] - coord[1][1]
++                        if y_ > 0:
++                            x_ = -x_
++                        y_ = abs(y_)
++
++                        if y_ < 0.001:
++                            theta = 0
++                        else:
++                            theta = math.atan2(y_, x_)
++                            theta = int(math.degrees(theta))
++                
++                a_t = angle_class(theta)
++                g1["reward"] = np.array([-5])
++                g1["origin_theta"] = np.array([theta])
++                g1["action"] = np.array([a_t, int(y), int(x)])
++
++                g2 = g1.create_group("state")
++                color = cv2.imread(path+'/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
++                color = color[:,:,[2,1,0]]
++                color = cv2.resize(color, (224,224))
++                g2.create_dataset('color', (224,224,3), data=color)
++                depth = np.load(path+'/episode_'+num+'/depth/depth_'+num+'_0.npy')
++                g2.create_dataset('depth', (224,224), data=depth)
++
++                g3 = g1.create_group("next_state")
++                g3.create_dataset('color', (224,224,3), data=color)
++                g3.create_dataset('depth', (224,224), data=depth)
++                g3["empty"] = np.array([False])
++                count[1] += 1
+ 
+         f.close()
+ 
+ logger(Path)
+ print('done')
+-# f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
++f = h5py.File('/home/austin/DataSet/grasp_drl/logger.hdf5', "r")
++print('Get ',len(f.keys()), ' transitions')
++print('Success : ',count[0], ' Fail : ', count[1])
++
++# Show structure
+ # print(f.keys())
+-# group = f['iter_486']
+-# for key in group.keys():
+-#     print(key)
+-# print('========================')
+-# print(group['state'])
+-# print(group['action'])
+-# print(group['reward'])
+-# print(group['next_state'])
+-# print('========================')
+-# for key in group['next_state']:
+-#     print(key)
+-
+-# color = f['iter_486/state/color'].value
+-# depth = f['iter_486/state/depth'].value
+-# colorn = f['iter_486/next_state/color'].value
+-# depthn = f['iter_486/next_state/depth'].value
+-
+-# # use the created array to output your multiple images. In this case I have stacked 4 images vertically
+-# print('========================')
+-# print(group['next_state/empty'])
+-# em = group['next_state/empty']
+-# print(em.value)
+-# print(color.shape)
+-# print(depth.shape)
+-# action = group['action']
+-# reward = group['reward']
+-# theta = group['origin_theta']
+-# print(action.value)
+-# print(reward.value)
+-# print(theta.value)
+-
+-# _, axarr = plt.subplots(2,2) 
+-# axarr[0][0].imshow(color)
+-# axarr[0][1].imshow(depth)
+-# axarr[1][0].imshow(colorn)
+-# axarr[1][1].imshow(depthn)
+-# plt.show()
++group = f['iter_486']
++for key in group.keys():
++    print(key)
++print('========================')
++print(group['state'])
++print(group['action'])
++print(group['reward'])
++print(group['next_state'])
++print('========================')
++for key in group['next_state']:
++    print(key)
++
++color = f['iter_486/state/color'].value
++depth = f['iter_486/state/depth'].value
++colorn = f['iter_486/next_state/color'].value
++depthn = f['iter_486/next_state/depth'].value
++
++print('========================')
++print(group['next_state/empty'])
++em = group['next_state/empty']
++print(em.value)
++print(color.shape)
++print(depth.shape)
++action = group['action']
++reward = group['reward']
++theta = group['origin_theta']
++print(action.value)
++print(reward.value)
++print(theta.value)
++
++_, axarr = plt.subplots(2,2) 
++axarr[0][0].imshow(color)
++axarr[0][1].imshow(depth)
++axarr[1][0].imshow(colorn)
++axarr[1][1].imshow(depthn)
++plt.show()
+diff --git a/grasp/src/sean_approach/offline.py b/grasp/src/sean_approach/offline.py
+index fdc8f63..5b6a1ba 100644
+--- a/grasp/src/sean_approach/offline.py
++++ b/grasp/src/sean_approach/offline.py
+@@ -24,7 +24,7 @@ class Option():
+         parser.add_argument("--save_freq", type=int, default=10, help="Every how many update should save the model, default is 5")
+         parser.add_argument("--updating_freq", type=int, default=10, help="Frequency for updating target network, default is 6") # C
+         parser.add_argument("--iteration", type=int, default=500, help="The train iteration, default is 30") # M
+-        parser.add_argument("--memory_size", type=int, default=1328, help="The memory size, default is None")
++        parser.add_argument("--memory_size", type=int, default=None, help="The memory size, default is None")
+         parser.add_argument("--discount_factor", type=float, default=0.9, help="The memory size, default is None")
+         # parser.add_argument("gripper_memory", type=str, default=None, help="The pkl file for save experience")
+ 
+@@ -62,13 +62,11 @@ def get_action_info(pixel_index):
+ 
+ class Offline_training():
+     def __init__(self, args):
+-        
+-        self.gripper_memory = Memory(args.memory_size)
+-
+         hdf5_path = '/home/austin/DataSet/grasp_drl/logger.hdf5'
+         f = h5py.File(hdf5_path, "r")
++        args.memory_size = len(f.keys())
+ 
+-        
++        self.gripper_memory = Memory(args.memory_size)
+ 
+         for key in f.keys():
+             group = f[key]
+@@ -110,7 +108,6 @@ class Offline_training():
+     def training(self, args):
+         print('Start training ...')
+         for i in range(args.iteration):
+-            # print('Epoch : ', i)
+             mini_batch = []
+             idxs = []
+             is_weight = []
+@@ -119,11 +116,6 @@ class Offline_training():
+ 
+             _mini_batch, _idxs, _is_weight = sample_data(self.gripper_memory, args.mini_batch_size);   mini_batch += _mini_batch; idxs += _idxs; is_weight += list(_is_weight)
+ 
+-            # _mini_batch, _idxs, _is_weight = sample_data(self.gripper_memory, args.mini_batch_size)
+-            # mini_batch += _mini_batch
+-            # idxs += _idxs
+-            # is_weight += list(_is_weight)
+-
+             for j in range(len(mini_batch)):
+                 color = mini_batch[j].color
+                 depth =mini_batch[j].depth
+@@ -158,12 +150,6 @@ class Offline_training():
+ 
+             if (i+1) % args.updating_freq == 0:
+                 self.trainer.target_net.load_state_dict(self.trainer.behavior_net.state_dict())
+-
+-            # if (i+1) == args.iteration:
+-            #     artifact = wandb.Artifact('model', type='model')
+-            #     artifact.add_file(os.path.join(os.path.join(self.weight_path, "behavior_{}.pth".format(i+1))))
+-            #     self.run.log_artifact(artifact)
+-            #     self.run.join()
+             
+             print('Epoch : ', i, ' | Loss : ', sum(loss_list)/len(loss_list))
+             wandb.log({"loss mean": np.mean(loss_list)})
+diff --git a/grasp/src/sean_approach/test.py b/grasp/src/sean_approach/test.py
+index 4254a8a..0e66688 100644
+--- a/grasp/src/sean_approach/test.py
++++ b/grasp/src/sean_approach/test.py
+@@ -8,17 +8,23 @@ import cv2
+ import copy
+ import h5py
+ import random
++import argparse
+ from matplotlib import pyplot as plt
+ 
+ from model import reinforcement_net
+ 
+-color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_500/rgb/rgb_500_0.jpg')
+-depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_500/depth/depth_500_0.npy')
++parser = argparse.ArgumentParser(prog="Set up", description='This program for testing')
++parser.add_argument("--idx", type=int, default=0, help="Give eposide index")
++args = parser.parse_args()
++
++num = str(args.idx)
++color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
++depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
+ size = color.shape[0]
+ 
+ net = reinforcement_net(use_cuda=True)
+ 
+-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_500.pth"
++model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_500_0.0016054634004831314.pth"
+ net.load_state_dict(torch.load(model_name))
+ net = net.cuda().eval()
+ 
+@@ -66,22 +72,20 @@ color_tensor, depth_tensor, pad = preprocessing(color, depth)
+ color_tensor = color_tensor.cuda()
+ depth_tensor = depth_tensor.cuda()
+ prediction = net.forward(color_tensor, depth_tensor, is_volatile=True)
+-print(type(prediction))
+-print(type(prediction[2]))
+-print(len(prediction))
++# print(type(prediction))
++# print(type(prediction[2]))
++# print(len(prediction))
+ size = color.shape[0]
+ s = color_tensor.shape[2]
+ lower = int(pad/2)
+ upper = int(s/2-pad/2)
+-# prediction: list with length 6
++# prediction: list with length 4
+ # | index | tool |
+ # | --- | --- |
+-# | 0 | small suction cup |
+-# | 1 | medium suction cup |
+-# | 2 | gripper with -90 deg |
+-# | 3 | gripper with -45 deg |
+-# | 4 | gripper with 0 deg |
+-# | 5 | gripper with 45 deg |
++# | 0 | gripper with -90 deg |
++# | 1 | gripper with -45 deg |
++# | 2 | gripper with 0 deg |
++# | 3 | gripper with 45 deg |
+ 
+ def vis_affordance(predictions):
+ 	tmp = np.copy(predictions)
+@@ -99,58 +103,60 @@ def plot_figures(tool):
+     tool_cmap = []
+     tt = []
+     i = 0
++    max_ = []
++    pos = []
+     theta_ = [90, -45, 0, 45]
+     for object in tool:
+         tool_cmap_ = vis_affordance(object)
+         combine_ = cv2.addWeighted(color, 1.0, tool_cmap_, 0.8, 0.0)
+         best = np.where(object == np.max(object))
+-        max = np.max(object)
++        maxx = np.max(object)
+         u, v = best[1][0], best[0][0]
+-        combine_ = cv2.circle(combine_, (u, v), 3, (255, 255, 255), 2)
++        pos.append([u, v])
++        combine_ = cv2.circle(combine_, (u, v), 3, (0, 0, 0), 2)
+         tt_ = color.copy()
+-        cv2.circle(tt_,(u, v), 5, (255, 0, 0), -1)
++        cv2.circle(tt_,(u, v), 5, (255, 255, 0), -1)
+         tool_cmap.append(tool_cmap_)
+         combine.append(combine_)
+         tt.append(tt_)
+-        print('angle : ', theta_[i], ' ',(u, v), ' max : ',max)
++        print('angle : ', theta_[i], ' ',(u, v), ' max : ',maxx)
++        max_.append(maxx)
+         i += 1
+ 
+-    # plt.figure()
++    Max = max(max_)
++    angle = theta_[max_.index(Max)]
++    positions = pos[max_.index(Max)]
+     f, axarr = plt.subplots(4,4) 
++    plt.suptitle('Resurt : Angle : '+str(angle)+' Position : '+str(positions))
++    axarr[0][0].set_title('90')
+     axarr[0][0].imshow(combine[0][:,:,::-1])
+     axarr[0][1].imshow(tool_cmap[0][:,:,[2,1,0]])
+     axarr[0][2].imshow(tt[0][:,:,[2,1,0]])
+     axarr[0][3].imshow(depth)
+ 
++    axarr[1][0].set_title('-45')
+     axarr[1][0].imshow(combine[1][:,:,::-1])
+     axarr[1][1].imshow(tool_cmap[1][:,:,[2,1,0]])
+     axarr[1][2].imshow(tt[1][:,:,[2,1,0]])
+     axarr[1][3].imshow(depth)
+ 
++    axarr[2][0].set_title('0')
+     axarr[2][0].imshow(combine[2][:,:,::-1])
+     axarr[2][1].imshow(tool_cmap[2][:,:,[2,1,0]])
+     axarr[2][2].imshow(tt[2][:,:,[2,1,0]])
+     axarr[2][3].imshow(depth)
+ 
++    axarr[3][0].set_title('45')
+     axarr[3][0].imshow(combine[3][:,:,::-1])
+     axarr[3][1].imshow(tool_cmap[3][:,:,[2,1,0]])
+     axarr[3][2].imshow(tt[3][:,:,[2,1,0]])
+     axarr[3][3].imshow(depth)
+-    # plt.savefig('/home/austin/DataSet/grasp_drl/0/image_'+str(theta_)+'.png', dpi=300)
+-
+-    # print('angle : ', theta_, ' ',(u, v), ' max : ',max)
++    plt.savefig('/home/austin/Grasp_drl/grasp/src/sean_approach/result/image_'+num+'.png', dpi=300)
+     plt.show()
+-# gripper with -90 deg
+-tool_3 = prediction[0][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+-# plot_figures(tool_3, -90)
+-# gripper with -45 deg
+-tool_4 = prediction[1][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+-# plot_figures(tool_4, -45)
+-# gripper with 0 deg
+-tool_5 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
+-# plot_figures(tool_5, 0)
+-# gripper with 45 deg
+-tool_6 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
+-# plot_figures(tool_6, 45)
+ 
+-plot_figures([tool_3, tool_4, tool_5, tool_6])
+\ No newline at end of file
++tool_0 = prediction[0][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
++tool_1 = prediction[1][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
++tool_2 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
++tool_3 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
++
++plot_figures([tool_0, tool_1, tool_2, tool_3])
+\ No newline at end of file
+diff --git a/grasp/src/sean_approach/trainer.py b/grasp/src/sean_approach/trainer.py
+index e5fd9d0..838db03 100644
+--- a/grasp/src/sean_approach/trainer.py
++++ b/grasp/src/sean_approach/trainer.py
+@@ -48,6 +48,11 @@ class Trainer():
+                                           {'params': self.behavior_net.grasp_depth_feat_extractor.parameters(), 'lr': args.densenet_lr},
+                                           ], lr = args.learning_rate, momentum = 0.9, weight_decay = 2e-5)
+ 
++        # self.optimizer = torch.optim.Adam([{'params': self.behavior_net.grasp_net.parameters(), 'lr': args.learning_rate},
++        #                                   {'params': self.behavior_net.grasp_color_feat_extractor.parameters(), 'lr': args.densenet_lr}, 
++        #                                   {'params': self.behavior_net.grasp_depth_feat_extractor.parameters(), 'lr': args.densenet_lr},
++        #                                   ], lr = args.learning_rate, weight_decay = 2e-5)
++
+         # load model if need 
+         if(args.load_model != None):
+             artifact = run.use_artifact(args.load_model, type='model')
+diff --git a/grasp/src/sean_approach/wandb/debug-internal.log b/grasp/src/sean_approach/wandb/debug-internal.log
+index 52e9cee..edde80e 120000
+--- a/grasp/src/sean_approach/wandb/debug-internal.log
++++ b/grasp/src/sean_approach/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20210628_214740-eefauhaj/logs/debug-internal.log
+\ No newline at end of file
++run-20210629_130656-1jl64sue/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/grasp/src/sean_approach/wandb/debug.log b/grasp/src/sean_approach/wandb/debug.log
+index 0c03993..240fc63 120000
+--- a/grasp/src/sean_approach/wandb/debug.log
++++ b/grasp/src/sean_approach/wandb/debug.log
+@@ -1 +1 @@
+-run-20210628_214740-eefauhaj/logs/debug.log
+\ No newline at end of file
++run-20210629_130656-1jl64sue/logs/debug.log
+\ No newline at end of file
+diff --git a/grasp/src/sean_approach/wandb/latest-run b/grasp/src/sean_approach/wandb/latest-run
+index b88dff2..da98741 120000
+--- a/grasp/src/sean_approach/wandb/latest-run
++++ b/grasp/src/sean_approach/wandb/latest-run
+@@ -1 +1 @@
+-run-20210628_214740-eefauhaj
+\ No newline at end of file
++run-20210629_130656-1jl64sue
+\ No newline at end of file

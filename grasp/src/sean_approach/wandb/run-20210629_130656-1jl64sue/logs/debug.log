@@ -1,0 +1,39 @@
+2021-06-29 13:06:56,906 INFO    MainThread:28392 [wandb_setup.py:_flush():69] setting env: {}
+2021-06-29 13:06:56,907 INFO    MainThread:28392 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-06-29 13:06:56,907 INFO    MainThread:28392 [wandb_init.py:_log_setup():336] Logging user logs to /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210629_130656-1jl64sue/logs/debug.log
+2021-06-29 13:06:56,907 INFO    MainThread:28392 [wandb_init.py:_log_setup():337] Logging internal logs to /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210629_130656-1jl64sue/logs/debug-internal.log
+2021-06-29 13:06:56,912 INFO    MainThread:28392 [wandb_init.py:init():369] calling init triggers
+2021-06-29 13:06:56,913 INFO    MainThread:28392 [wandb_init.py:init():376] wandb.init called with sweep_config: {}
+config: {}
+2021-06-29 13:06:56,916 INFO    MainThread:28392 [wandb_init.py:init():418] starting backend
+2021-06-29 13:06:56,916 INFO    MainThread:28392 [backend.py:_multiprocessing_setup():71] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-06-29 13:06:56,943 INFO    MainThread:28392 [backend.py:ensure_launched():123] starting backend process...
+2021-06-29 13:06:56,954 INFO    MainThread:28392 [backend.py:ensure_launched():128] started backend process with pid: 28418
+2021-06-29 13:06:56,955 INFO    MainThread:28392 [wandb_init.py:init():423] backend started and connected
+2021-06-29 13:06:56,960 INFO    MainThread:28392 [wandb_init.py:init():465] updated telemetry
+2021-06-29 13:06:56,960 INFO    MainThread:28392 [wandb_init.py:init():484] communicating current version
+2021-06-29 13:06:57,621 INFO    MainThread:28392 [wandb_init.py:init():489] got version response upgrade_message: "wandb version 0.10.32 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2021-06-29 13:06:57,621 INFO    MainThread:28392 [wandb_init.py:init():497] communicating run to backend with 30 second timeout
+2021-06-29 13:06:57,857 INFO    MainThread:28392 [wandb_init.py:init():522] starting run threads in backend
+2021-06-29 13:06:59,830 INFO    MainThread:28392 [wandb_run.py:_console_start():1554] atexit reg
+2021-06-29 13:06:59,834 INFO    MainThread:28392 [wandb_run.py:_redirect():1401] redirect: SettingsConsole.REDIRECT
+2021-06-29 13:06:59,836 INFO    MainThread:28392 [wandb_run.py:_redirect():1406] Redirecting console.
+2021-06-29 13:06:59,841 INFO    MainThread:28392 [wandb_run.py:_redirect():1468] Redirects installed.
+2021-06-29 13:06:59,841 INFO    MainThread:28392 [wandb_init.py:init():546] run started, returning control to user process
+2021-06-29 13:06:59,845 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set learning_rate = 0.00025 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,845 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb learning_rate 0.00025 None
+2021-06-29 13:06:59,849 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set iteration = 500 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,849 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb iteration 500 None
+2021-06-29 13:06:59,852 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set memory_size = 1326 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,852 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb memory_size 1326 None
+2021-06-29 13:06:59,854 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set updating_freq = 20 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,855 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb updating_freq 20 None
+2021-06-29 13:06:59,857 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set mini_batch_size = 10 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,857 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb mini_batch_size 10 None
+2021-06-29 13:06:59,859 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set densenet_lr = 5e-05 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,859 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb densenet_lr 5e-05 None
+2021-06-29 13:06:59,860 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set save_freq = 10 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,861 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb save_freq 10 None
+2021-06-29 13:06:59,862 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set discount_factor = 0.9 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
+2021-06-29 13:06:59,862 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb discount_factor 0.9 None
