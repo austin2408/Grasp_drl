@@ -133,7 +133,7 @@ def logger(path):
 
         f.close()
 
-logger(Path)
+# logger(Path)
 print('done')
 f = h5py.File('/home/austin/DataSet/grasp_drl/logger05.hdf5', "r")
 print('Get ',len(f.keys()), ' transitions')
@@ -141,7 +141,7 @@ print('Success : ',count[0], ' Fail : ', count[1])
 print('========================')
 # Show structure
 # print(f.keys())
-group = f['iter_486']
+group = f['iter_400']
 for key in group.keys():
     print(key)
 print('========================')
@@ -153,10 +153,10 @@ print('========================')
 for key in group['next_state']:
     print(key)
 
-color = f['iter_486/state/color'].value
-depth = f['iter_486/state/depth'].value
-colorn = f['iter_486/next_state/color'].value
-depthn = f['iter_486/next_state/depth'].value
+color = f['iter_400/state/color'].value
+depth = f['iter_400/state/depth'].value
+colorn = f['iter_400/next_state/color'].value
+depthn = f['iter_400/next_state/depth'].value
 
 print('========================')
 print(group['next_state/empty'])

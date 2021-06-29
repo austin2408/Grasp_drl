@@ -18,13 +18,15 @@ parser.add_argument("--idx", type=int, default=0, help="Give eposide index")
 args = parser.parse_args()
 
 num = str(args.idx)
-color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
-depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
+color = cv2.imread('/home/austin/DataSet/grasp_drl/Datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+color = cv2.resize(color,(224,224))
+depth = np.load('/home/austin/DataSet/grasp_drl/Datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
+print(depth.shape)
 size = color.shape[0]
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_500_0.0016054634004831314.pth"
+model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_160_0.056181950867176055.pth"
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 

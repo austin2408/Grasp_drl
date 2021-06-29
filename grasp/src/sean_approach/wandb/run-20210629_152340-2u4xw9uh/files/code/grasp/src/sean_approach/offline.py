@@ -156,7 +156,7 @@ class Offline_training():
             
             print('Epoch : ', i+1, ' | Loss : ', sum(loss_list)/len(loss_list), ' S/F : ', record/10)
             wandb.log({"loss mean": np.mean(loss_list)})
-            wandb.log({"Success sample rate": record/10})
+            wandb.log({"S/F": record/10})
 
 if __name__ == "__main__":
 

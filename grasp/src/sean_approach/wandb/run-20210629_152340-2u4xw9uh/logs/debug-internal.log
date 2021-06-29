@@ -1,0 +1,33 @@
+2021-06-29 15:23:40,635 INFO    MainThread:9483 [internal.py:wandb_internal():91] W&B internal server running at pid: 9483, started at: 2021-06-29 15:23:40.634887
+2021-06-29 15:23:40,637 DEBUG   SenderThread:9483 [sender.py:send():173] send: header
+2021-06-29 15:23:40,637 INFO    WriterThread:9483 [datastore.py:open_for_write():77] open: /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210629_152340-2u4xw9uh/run-2u4xw9uh.wandb
+2021-06-29 15:23:40,638 DEBUG   HandlerThread:9483 [handler.py:handle_request():121] handle_request: check_version
+2021-06-29 15:23:40,638 DEBUG   SenderThread:9483 [sender.py:send_request():183] send_request: check_version
+2021-06-29 15:23:40,773 DEBUG   SenderThread:9483 [sender.py:send():173] send: run
+2021-06-29 15:23:41,014 INFO    SenderThread:9483 [sender.py:_start_run_threads():681] run started: 2u4xw9uh with start time 1624951420
+2021-06-29 15:23:41,014 DEBUG   SenderThread:9483 [sender.py:send():173] send: summary
+2021-06-29 15:23:41,014 DEBUG   HandlerThread:9483 [handler.py:handle_request():121] handle_request: run_start
+2021-06-29 15:23:41,016 INFO    SenderThread:9483 [sender.py:_save_file():808] saving file wandb-summary.json with policy end
+2021-06-29 15:23:42,969 DEBUG   HandlerThread:9483 [meta.py:__init__():39] meta init
+2021-06-29 15:23:42,969 DEBUG   HandlerThread:9483 [meta.py:__init__():53] meta init done
+2021-06-29 15:23:42,969 DEBUG   HandlerThread:9483 [meta.py:probe():210] probe
+2021-06-29 15:23:42,975 DEBUG   HandlerThread:9483 [meta.py:_setup_git():200] setup git
+2021-06-29 15:23:42,992 DEBUG   HandlerThread:9483 [meta.py:_setup_git():207] setup git done
+2021-06-29 15:23:42,992 DEBUG   HandlerThread:9483 [meta.py:_save_code():89] save code
+2021-06-29 15:23:42,999 DEBUG   HandlerThread:9483 [meta.py:_save_code():110] save code done
+2021-06-29 15:23:42,999 DEBUG   HandlerThread:9483 [meta.py:_save_patches():127] save patches
+2021-06-29 15:23:43,035 WARNING MainThread:9483 [internal.py:wandb_internal():146] Internal process interrupt: 1
+2021-06-29 15:23:43,035 ERROR   HandlerThread:9483 [meta.py:_save_patches():168] Error generating diff: Command '['git', 'diff', '--submodule=diff', 'HEAD']' died with <Signals.SIGINT: 2>.
+2021-06-29 15:23:43,035 DEBUG   HandlerThread:9483 [meta.py:_save_patches():169] save patches done
+2021-06-29 15:23:43,035 DEBUG   HandlerThread:9483 [meta.py:_save_pip():57] save pip
+2021-06-29 15:23:43,036 DEBUG   HandlerThread:9483 [meta.py:_save_pip():71] save pip done
+2021-06-29 15:23:43,036 DEBUG   HandlerThread:9483 [meta.py:probe():252] probe done
+2021-06-29 15:23:43,039 DEBUG   SenderThread:9483 [sender.py:send():173] send: files
+2021-06-29 15:23:43,039 INFO    SenderThread:9483 [sender.py:_save_file():808] saving file wandb-metadata.json with policy now
+2021-06-29 15:23:43,039 INFO    SenderThread:9483 [sender.py:_save_file():808] saving file code/grasp/src/sean_approach/offline.py with policy now
+2021-06-29 15:23:43,301 WARNING MainThread:9483 [internal.py:wandb_internal():146] Internal process interrupt: 2
+2021-06-29 15:23:43,301 ERROR   MainThread:9483 [internal.py:wandb_internal():149] Internal process interrupted.
+2021-06-29 15:23:44,039 INFO    WriterThread:9483 [datastore.py:close():258] close: /home/austin/Grasp_drl/grasp/src/sean_approach/wandb/run-20210629_152340-2u4xw9uh/run-2u4xw9uh.wandb
+2021-06-29 15:23:44,040 INFO    HandlerThread:9483 [handler.py:finish():629] shutting down handler
+2021-06-29 15:23:44,040 INFO    SenderThread:9483 [sender.py:finish():912] shutting down sender
+2021-06-29 15:23:46,222 INFO    MainThread:9483 [internal.py:handle_exit():78] Internal process exited

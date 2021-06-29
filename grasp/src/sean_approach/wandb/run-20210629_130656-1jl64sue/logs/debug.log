@@ -37,3 +37,5 @@ config: {}
 2021-06-29 13:06:59,861 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb save_freq 10 None
 2021-06-29 13:06:59,862 INFO    MainThread:28392 [wandb_config.py:__setitem__():141] config set discount_factor = 0.9 - <bound method Run._config_callback of <wandb.sdk.wandb_run.Run object at 0x7f5f55e9ca58>>
 2021-06-29 13:06:59,862 INFO    MainThread:28392 [wandb_run.py:_config_callback():779] config_cb discount_factor 0.9 None
+2021-06-29 13:21:52,396 INFO    MainThread:28392 [wandb_run.py:_atexit_cleanup():1524] got exitcode: 255
+2021-06-29 13:21:52,396 INFO    MainThread:28392 [wandb_run.py:_restore():1496] restore
