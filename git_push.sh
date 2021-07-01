@@ -18,5 +18,5 @@ if [ ! -z "$2" ]; then
 fi
 
 git add -A
-git commit -m "$1 on core"
+git commit -m "$1"
 git push
