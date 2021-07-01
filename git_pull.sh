@@ -1,6 +1,5 @@
 #! /bin/bash
 
-# echo "password: $2"
 BRANCH=master
 if [ ! -z "$1" ]; then
     echo "pull branch: $1"
