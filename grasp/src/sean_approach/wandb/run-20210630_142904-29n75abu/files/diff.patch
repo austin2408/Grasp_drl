@@ -1,0 +1,67 @@
+diff --git a/grasp/src/sean_approach/test.py b/grasp/src/sean_approach/test.py
+index 354d6bf..2483176 100644
+--- a/grasp/src/sean_approach/test.py
++++ b/grasp/src/sean_approach/test.py
+@@ -26,7 +26,7 @@ size = color.shape[0]
+ 
+ net = reinforcement_net(use_cuda=True)
+ 
+-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_160_0.056181950867176055.pth"
++model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight/behavior_130_0.00010932852746918798.pth"
+ net.load_state_dict(torch.load(model_name))
+ net = net.cuda().eval()
+ 
+@@ -48,14 +48,16 @@ def preprocessing(color, depth):
+ 	color_img_2x = np.concatenate((color_img_2x_r, color_img_2x_g, color_img_2x_b), axis = 2)
+ 	depth_img_2x = np.pad(depth_img_2x, padding_width, 'constant', constant_values=0)
+ 	# Normalize color image with ImageNet data
+-	image_mean = [0.485, 0.456, 0.406] # for sim: [0.20414721, 0.17816422, 0.15419899]
+-	image_std  = [0.229, 0.224, 0.225] # for sim: [0.1830081 , 0.16705943, 0.17520182]
++	image_mean = [0.33638567, 0.33638567, 0.33638567]
++	image_std  = [0.2603763,  0.2443466,  0.24258484]
++	# image_mean = [0.485, 0.456, 0.406] # for sim: [0.20414721, 0.17816422, 0.15419899]
++	# image_std  = [0.229, 0.224, 0.225] # for sim: [0.1830081 , 0.16705943, 0.17520182]
+ 	input_color_img = color_img_2x.astype(float)/255 # np.uint8 to float
+ 	for c in range(3):
+ 		input_color_img[:, :, c] = (input_color_img[:, :, c] - image_mean[c]) / image_std[c]
+ 	# Normalize depth image
+-	depth_mean = 0.0909769548291 # for sim: 0.032723393
+-	depth_std = 0.0397293901695 # for sim: 0.056900032
++	depth_mean = 1.3136337 # for sim: 0.032723393
++	depth_std = 1.9633287 # for sim: 0.056900032
+ 	tmp = depth_img_2x.astype(float)
+ 	tmp = (tmp-depth_mean)/depth_std
+ 	# Duplicate channel to DDD
+@@ -129,7 +131,7 @@ def plot_figures(tool):
+     angle = theta_[max_.index(Max)]
+     positions = pos[max_.index(Max)]
+     f, axarr = plt.subplots(4,4) 
+-    plt.suptitle('Resurt : Angle : '+str(angle)+' Position : '+str(positions))
++    plt.suptitle('Result : Angle : '+str(angle)+' Position : '+str(positions))
+     axarr[0][0].set_title('90')
+     axarr[0][0].imshow(combine[0][:,:,::-1])
+     axarr[0][1].imshow(tool_cmap[0][:,:,[2,1,0]])
+diff --git a/grasp/src/sean_approach/trainer.py b/grasp/src/sean_approach/trainer.py
+index 838db03..93925ce 100644
+--- a/grasp/src/sean_approach/trainer.py
++++ b/grasp/src/sean_approach/trainer.py
+@@ -81,15 +81,15 @@ class Trainer():
+         color_img_2x = np.concatenate((color_img_2x_r, color_img_2x_g, color_img_2x_b), axis = 2)
+         depth_img_2x = np.pad(depth_img_2x, padding_width, 'constant', constant_values=0)
+         # Normalize color image with ImageNet data
+-        image_mean = [0.805, 0.456, 0.406]
+-        image_std  = [0.229, 0.224, 0.225]
++        image_mean = [0.33638567, 0.33638567, 0.33638567]
++        image_std  = [0.2603763,  0.2443466,  0.24258484]
+         input_color_img = color_img_2x.astype(float)/255 # np.uint8 to float
+         for c in range(3):
+             input_color_img[:, :, c] = (input_color_img[:, :, c] - image_mean[c]) / image_std[c]
+         # Normalize depth image
+-        depth_mean = 0.0909769580291
++        depth_mean = 1.3136337
+         #depth_std  = 0.0005 # Terrible value...
+-        depth_std = 0.0398093901695
++        depth_std = 1.9633287
+         tmp = depth_img_2x.astype(float)
+         tmp = (tmp-depth_mean)/depth_std
+         # Duplicate channel to DDD

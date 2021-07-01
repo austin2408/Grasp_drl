@@ -81,15 +81,15 @@ class Trainer():
         color_img_2x = np.concatenate((color_img_2x_r, color_img_2x_g, color_img_2x_b), axis = 2)
         depth_img_2x = np.pad(depth_img_2x, padding_width, 'constant', constant_values=0)
         # Normalize color image with ImageNet data
-        image_mean = [0.805, 0.456, 0.406]
-        image_std  = [0.229, 0.224, 0.225]
+        image_mean = [0.33638567, 0.33638567, 0.33638567]
+        image_std  = [0.2603763,  0.2443466,  0.24258484]
         input_color_img = color_img_2x.astype(float)/255 # np.uint8 to float
         for c in range(3):
             input_color_img[:, :, c] = (input_color_img[:, :, c] - image_mean[c]) / image_std[c]
         # Normalize depth image
-        depth_mean = 0.0909769580291
+        depth_mean = 1.3136337
         #depth_std  = 0.0005 # Terrible value...
-        depth_std = 0.0398093901695
+        depth_std = 1.9633287
         tmp = depth_img_2x.astype(float)
         tmp = (tmp-depth_mean)/depth_std
         # Duplicate channel to DDD

@@ -9,7 +9,7 @@ import random
 import json
 
 Path = '/home/austin/DataSet/grasp_drl/datasets'
-ratio = 0.5
+ratio = 0
 count = [0,0]
 
 # Divide origin angle into 4 categories
@@ -36,7 +36,7 @@ def angle_class(theta_):
 
 def logger(path):
     name_list = os.listdir(path)
-    with h5py.File('/home/austin/DataSet/grasp_drl/logger05.hdf5','w') as f:
+    with h5py.File('/home/austin/DataSet/grasp_drl/logger0.hdf5','w') as f:
         for name in name_list:
             num = name.split('_')[1]
 
@@ -133,9 +133,9 @@ def logger(path):
 
         f.close()
 
-# logger(Path)
+logger(Path)
 print('done')
-f = h5py.File('/home/austin/DataSet/grasp_drl/logger05.hdf5', "r")
+f = h5py.File('/home/austin/DataSet/grasp_drl/logger0.hdf5', "r")
 print('Get ',len(f.keys()), ' transitions')
 print('Success : ',count[0], ' Fail : ', count[1])
 print('========================')

@@ -23,7 +23,7 @@ class Option():
         parser.add_argument("--mini_batch_size", type=int, default=10, help="How many transitions should used for learning, default is 10") # K
         parser.add_argument("--save_freq", type=int, default=10, help="Every how many update should save the model, default is 5")
         parser.add_argument("--updating_freq", type=int, default=10, help="Frequency for updating target network, default is 6") # C
-        parser.add_argument("--iteration", type=int, default=500, help="The train iteration, default is 30") # M
+        parser.add_argument("--iteration", type=int, default=250, help="The train iteration, default is 30") # M
         parser.add_argument("--memory_size", type=int, default=None, help="The memory size, default is None")
         parser.add_argument("--discount_factor", type=float, default=0.9, help="The memory size, default is None")
         # parser.add_argument("gripper_memory", type=str, default=None, help="The pkl file for save experience")
@@ -62,7 +62,7 @@ def get_action_info(pixel_index):
 
 class Offline_training():
     def __init__(self, args):
-        hdf5_path = '/home/austin/DataSet/grasp_drl/logger0.hdf5'
+        hdf5_path = '/home/austin/DataSet/grasp_drl/logger05.hdf5'
         f = h5py.File(hdf5_path, "r")
         args.memory_size = len(f.keys())
 
