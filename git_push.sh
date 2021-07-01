@@ -2,7 +2,7 @@
 
 
 if [ ! "$1" ]; then
-    echo "commit detail please"
+    echo "commit detail please ~"
     return
 fi
 echo "commit: $1"
