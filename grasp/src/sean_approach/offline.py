@@ -22,7 +22,7 @@ class Option():
         parser.add_argument("--densenet_lr", type=float, default=5e-5, help="Learning rate for the densenet block, default is 5e-5")
         parser.add_argument("--mini_batch_size", type=int, default=10, help="How many transitions should used for learning, default is 10") # K
         parser.add_argument("--save_freq", type=int, default=10, help="Every how many update should save the model, default is 5")
-        parser.add_argument("--updating_freq", type=int, default=10, help="Frequency for updating target network, default is 6") # C
+        parser.add_argument("--updating_freq", type=int, default=20, help="Frequency for updating target network, default is 6") # C
         parser.add_argument("--iteration", type=int, default=500, help="The train iteration, default is 30") # M
         parser.add_argument("--memory_size", type=int, default=None, help="The memory size, default is None")
         parser.add_argument("--discount_factor", type=float, default=0.9, help="The memory size, default is None")

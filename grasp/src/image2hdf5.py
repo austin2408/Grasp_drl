@@ -9,7 +9,7 @@ import random
 import json
 
 Path = '/home/austin/DataSet/grasp_drl/datasets'
-ratio = 0
+ratio = 1
 count = [0,0]
 
 # Divide origin angle into 4 categories
@@ -20,23 +20,56 @@ count = [0,0]
 # | 1 | gripper with -45 deg |
 # | 2 | gripper with 0 deg |
 # | 3 | gripper with 45 deg |
-def angle_class(theta_):
+def angle_class_4(theta_):
     angle = [0, 45, 90, 135]
     if (theta_ >angle[0] -22.5) and (theta_ < angle[0] + 22.5): # 0 +- 22.5
         return 2
     if (theta_ > angle[1] - 22.5) and (theta_ < angle[1] + 22.5): # 45 +- 22.5
-        return 3
+        return 1
     if (theta_ > angle[2] - 22.5) and (theta_ < angle[2] + 22.5): # 90 +- 22.5
         return 0
     if (theta_ > angle[3] - 22.5) and (theta_ < angle[3] + 22.5): # 135 +- 22.5
-        return 1
+        return 3
     if (theta_ > angle[3] + 22.5) and (theta_ < 180): # 180 - 180-22.5
         return 2
+# Divide origin angle into 8 categories
+# prediction: list with length 4
+# | index | tool |
+# | --- | --- |
+# | 0 | gripper with -90 deg |
+# | 1 | gripper with -45 deg |
+# | 2 | gripper with 0 deg |
+# | 3 | gripper with 45 deg |
+# | 4 | gripper with -22.5 deg |
+# | 5 | gripper with 22.5 deg |
+# | 6 | gripper with -67.5 deg |
+# | 7 | gripper with 67.5 deg |
+def angle_class_8(theta_):
+    angle = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5]
+    if (theta_ > angle[0] - 11.25) and (theta_ < angle[0] + 11.25): # 0 +- 11.25 ( real angle )
+        return 2
+    if (theta_ > angle[1] - 11.25) and (theta_ < angle[1] + 11.25): # 22.5 +- 11.25
+        return 4
+    if (theta_ > angle[2] - 11.25) and (theta_ < angle[2] + 11.25): # 45 +- 11.25
+        return 1
+    if (theta_ > angle[3] - 11.25) and (theta_ < angle[3] + 11.25): # 67.5 +- 11.25
+        return 6
+    if (theta_ > angle[4] - 11.25) and (theta_ < angle[4] + 11.25): # 90 +- 11.25
+        return 0
+    if (theta_ > angle[5] - 11.25) and (theta_ < angle[5] + 11.25): # 112.5 +- 11.25
+        return 7
+    if (theta_ > angle[6] - 11.25) and (theta_ < angle[6] + 11.25): # 135 +- 11.25
+        return 3
+    if (theta_ > angle[7] - 11.25) and (theta_ < angle[7] + 11.25): # 157.5 +- 11.25
+        return 5
+    if (theta_ >= angle[7] + 11.25) and (theta_ <= 180 ):
+        return 2
+
 
 
 def logger(path):
     name_list = os.listdir(path)
-    with h5py.File('/home/austin/DataSet/grasp_drl/logger0.hdf5','w') as f:
+    with h5py.File('/home/austin/DataSet/grasp_drl/Logger05_8.hdf5','w') as f:
         for name in name_list:
             num = name.split('_')[1]
 
@@ -63,7 +96,7 @@ def logger(path):
                         theta = int(math.degrees(theta))
             
             # Set action, reward, origin angle
-            a_t = angle_class(theta)
+            a_t = angle_class_8(theta)
             g1["reward"] = np.array([5])
             g1["origin_theta"] = np.array([theta])
             g1["action"] = np.array([a_t, int(y), int(x)])
@@ -112,7 +145,7 @@ def logger(path):
                             theta = math.atan2(y_, x_)
                             theta = int(math.degrees(theta))
                 
-                a_t = angle_class(theta)
+                a_t = angle_class_8(theta)
                 g1["reward"] = np.array([-5])
                 g1["origin_theta"] = np.array([theta])
                 g1["action"] = np.array([a_t, int(y), int(x)])
@@ -135,13 +168,13 @@ def logger(path):
 
 logger(Path)
 print('done')
-f = h5py.File('/home/austin/DataSet/grasp_drl/logger0.hdf5', "r")
+f = h5py.File('/home/austin/DataSet/grasp_drl/Logger05_8.hdf5', "r")
 print('Get ',len(f.keys()), ' transitions')
 print('Success : ',count[0], ' Fail : ', count[1])
 print('========================')
 # Show structure
 # print(f.keys())
-group = f['iter_400']
+group = f['iter_459']
 for key in group.keys():
     print(key)
 print('========================')
@@ -153,10 +186,10 @@ print('========================')
 for key in group['next_state']:
     print(key)
 
-color = f['iter_400/state/color'].value
-depth = f['iter_400/state/depth'].value
-colorn = f['iter_400/next_state/color'].value
-depthn = f['iter_400/next_state/depth'].value
+color = f['iter_459/state/color'].value
+depth = f['iter_459/state/depth'].value
+colorn = f['iter_459/next_state/color'].value
+depthn = f['iter_459/next_state/depth'].value
 
 print('========================')
 print(group['next_state/empty'])

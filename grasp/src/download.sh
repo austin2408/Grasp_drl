@@ -13,7 +13,7 @@ gdown --id 1hjQ1IH8abb-RXjJ8cDegzXXgjfh-tmf8
 
 echo -e "\e[93m download model behavior_160_0.05.pth \e[0m"
 # cd $cwd
-gdown --id 1em1g679GnRLmdlZvpAWqR3krHyFlxipg
+gdown --id 1nBzeLm7_ch8fSnap_m_dd6SdzEkmImNa
 # rl vae
 # echo -e "\e[93m download VAE model 0726_1557.pth \e[0m"
 # cd $cwd/vae
