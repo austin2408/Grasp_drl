@@ -62,7 +62,7 @@ def get_action_info(pixel_index):
 
 class Offline_training():
     def __init__(self, args):
-        hdf5_path = '/home/austin/DataSet/grasp_drl/logger0.hdf5'
+        hdf5_path = args.save_folder+'/datasets/Logger05.hdf5'
         f = h5py.File(hdf5_path, "r")
         args.memory_size = len(f.keys())
 

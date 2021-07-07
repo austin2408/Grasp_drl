@@ -13,3 +13,8 @@ $ python3 offline.py"
 ```bash
 $ python3 test.py"
 ```
+
+## Evaluation
+```bash
+$ python3 evaluation.py"
+```

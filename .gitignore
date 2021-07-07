@@ -21,6 +21,7 @@ CATKIN_IGNORE
 pozyx_ros/result
 *.mp3
 *.wav
+*.hdf5
 
 !tools/virtualJoy/images/*
 !audio_intf/mics/*

@@ -20,6 +20,7 @@ args = parser.parse_args()
 
 num = str(args.idx)
 
+path = os.getcwd()
 # color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
 # color = cv2.resize(color,(224,224))
 # depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
@@ -31,7 +32,7 @@ size = color.shape[0]
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight_try_2_sucess/behavior_160_0.056181950867176055.pth"
+model_name = path+'/model/behavior_160_0.05.pth'
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 

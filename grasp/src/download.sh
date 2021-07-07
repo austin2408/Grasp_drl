@@ -1,66 +1,27 @@
 #! /bin/bash
 
 cwd=$PWD
+cd $cwd'/sean_approach'
 
-# rl forward
+mkdir -p 'datasets'
+mkdir -p 'model'
+
+cd 'datasets'
 echo -e "\e[93m download datasets Logger.hdf5 \e[0m"
-# cd $cwd
 gdown --id 1HjoZB_M3njfc9D78QVkAWQpPwNDFTiFS
 
 echo -e "\e[93m download datasets Logger05.hdf5 \e[0m"
-
 gdown --id 1F6HTnuDbP-TCmyxwZVdt0FhnOq-qKe-M
 
 echo -e "\e[93m download datasets Logger_8.hdf5 \e[0m"
-
 gdown --id 1UCL-GT43AQ8Ha1Y4NAaWjUD0Di6I4j1P
 
 echo -e "\e[93m download datasets Logger05_8.hdf5 \e[0m"
-# cd $cwd
 gdown --id 1UrjmRLTVOrWqseT578wWfqdTZbK4Cckw
 
+cd ..
+cd 'model'
 echo -e "\e[93m download model behavior_160_0.05.pth \e[0m"
-# cd $cwd
 gdown --id 1nBzeLm7_ch8fSnap_m_dd6SdzEkmImNa
-# rl vae
-# echo -e "\e[93m download VAE model 0726_1557.pth \e[0m"
-# cd $cwd/vae
-# gdown --id 1B2ugYD11vKhcSiJR3loldEmOtpV3OnbQ
 
-# # rl cgan
-# echo -e "\e[93m download cGAN model 0827_1851.pth \e[0m"
-# cd $cwd/cgan
-# gdown --id 1KSgA1O-BKuRzav8Ew-bALgKJY490qZKO
-
-# # rl contrastive
-# echo -e "\e[93m download contrastive mse model mse.pth \e[0m"
-# cd $cwd/rdpg_torch_forward
-# gdown --id 1gffTWAI3hOGE09FjF0kc_of5xLprdtK1
-
-# # rl goal
-# echo -e "\e[93m download rl goal s0214_f435052.pth \e[0m"
-# cd $cwd/goal
-# gdown --id 1OZb9QXisx_-fLj0i0LdxDwW1Jonqvu3E
-
-# echo -e "\e[93m download rl goal d4pg \e[0m"
-# cd $cwd/goal
-# gdown --id 1COpa_Z3ZYIZFurFIxHAIsN9J9XGW7V2Q
-# unzip policy.zip
-# rm policy.zip
-
-# echo -e "\e[93m download rl goal mmwave d4pg \e[0m"
-# cd $cwd/goal
-# gdown --id 1ntwYOA0QkG9WN6sD-3tKuoBirxc2CKWo
-# unzip policy_mmwave.zip
-# rm policy_mmwave.zip
-
-# echo -e "\e[93m radar transformer cgn \e[0m"
-# cd $cwd/transformer
-# gdown --id 1DHpi4r74FgMIoWZkQqNZMn4E4EOQgxoA
-
-# echo -e "\e[93m radar transformer radar encoder \e[0m"
-# cd $cwd/transformer
-# gdown --id 1ggZ3JdnlXc8atXW77y-rQwMolOge4GjX
-
-
-# cd $cwd
+cd ../..

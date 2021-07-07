@@ -15,6 +15,7 @@ import torch
 from torchvision import transforms
 from prioritized_memory import Memory
 
+path = os.getcwd()
 
 def standarization(prediction):
 	if prediction.shape[0] is not 1:
@@ -89,7 +90,7 @@ def plot_figures(tool, color, depth, show=False, save=False):
     axarr[0][4].imshow(combine[3][:,:,::-1])
     axarr[1][4].imshow(tool_cmap[3][:,:,[2,1,0]])
     if save:
-        plt.savefig('/home/austin/Grasp_drl/grasp/src/sean_approach/result/sample.png', dpi=300)
+        plt.savefig(path+'/result/sample.png', dpi=300)
     if show:
         plt.show()
 

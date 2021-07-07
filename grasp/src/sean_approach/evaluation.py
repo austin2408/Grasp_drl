@@ -14,10 +14,11 @@ from matplotlib import pyplot as plt
 
 from model import reinforcement_net
 from utils import plot_figures, preprocessing
+path = os.getcwd()
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = "/home/austin/Grasp_drl/grasp/src/sean_approach/weight_try_2_sucess/behavior_160_0.056181950867176055.pth"
+model_name = path+'/model/behavior_160_0.05.pth'
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 
