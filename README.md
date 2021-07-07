@@ -2,7 +2,7 @@
 
 Here is the work to use DQN to predict a "grasping action" by Pytorch .
 
-![Teaser](grasp/src/sean_approach/result/try_2_success_6_7/image_0.png)
+![Teaser](grasp/src/sean_approach/result/sample.png)
 
 ## Train
 ```bash

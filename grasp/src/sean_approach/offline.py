@@ -154,8 +154,8 @@ class Offline_training():
             if (i+1) % args.updating_freq == 0:
                 self.trainer.target_net.load_state_dict(self.trainer.behavior_net.state_dict())
             
-            print('Epoch : ', i+1, ' | Loss : ', sum(loss_list)/len(loss_list), ' S/F : ', record/10)
-            wandb.log({"loss mean": np.mean(loss_list)})
+            print('Epoch : ', i+1, ' | Loss : ', sum(loss_list), ' S/F : ', record/10)
+            wandb.log({"loss mean": sum(loss_list)})
             wandb.log({"Success Sample Rate": record/10})
 
 if __name__ == "__main__":
