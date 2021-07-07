@@ -3,13 +3,13 @@
 cwd=$PWD
 
 # rl forward
-echo -e "\e[93m download datasets logger.hdf5 \e[0m"
+echo -e "\e[93m download datasets Logger.hdf5 \e[0m"
 # cd $cwd
-gdown --id 1evy8paNNeGj_I5N78KrrOi4U_8rRmuIE
+gdown --id 1HjoZB_M3njfc9D78QVkAWQpPwNDFTiFS
 
-echo -e "\e[93m download datasets logger05.hdf5 \e[0m"
+echo -e "\e[93m download datasets Logger05.hdf5 \e[0m"
 # cd $cwd
-gdown --id 1hjQ1IH8abb-RXjJ8cDegzXXgjfh-tmf8
+gdown --id 1F6HTnuDbP-TCmyxwZVdt0FhnOq-qKe-M
 
 echo -e "\e[93m download model behavior_160_0.05.pth \e[0m"
 # cd $cwd
