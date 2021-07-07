@@ -10,6 +10,9 @@ from collections import namedtuple
 from trainer import Trainer
 from prioritized_memory import Memory
 
+import warnings  
+warnings.filterwarnings("ignore") 
+
 # Define transition tuple
 Transition = namedtuple('Transition', ['color', 'depth', 'pixel_idx', 'reward', 'next_color', 'next_depth', 'is_empty'])
 

@@ -11,23 +11,29 @@ import h5py
 import random
 import argparse
 from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix
+from matplotlib.font_manager import FontProperties
 
 from model import reinforcement_net
 from utils import plot_figures, preprocessing
+import warnings  
+warnings.filterwarnings("ignore") 
 path = os.getcwd()
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = path+'/model/behavior_160_0.05.pth'
+model_name = path+'/model/behavior_500_0.0002946976572275162.pth'
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 
-hdf5_path = '/home/austin/DataSet/grasp_drl/logger0.hdf5'
+hdf5_path = path+'/datasets/Logger05.hdf5'
 f = h5py.File(hdf5_path, "r")
 angle = [90, -45, 0, 45]
 dis_count = 0
 theta_count = 0
-file = open('/home/austin/Grasp_drl/grasp/src/sean_approach/Test_record.txt', "a+")
+angle_label = []
+angle_pred = []
+file = open(path+'/Test_record.txt', "a+")
 for name in f.keys():
     group = f[name]
     action = group['action']
@@ -52,6 +58,8 @@ for name in f.keys():
 
     result = plot_figures([tool_0, tool_1, tool_2, tool_3], color, depth)
     theta = angle[int(action.value[0])]
+    angle_pred.append(int(result[0]))
+    angle_label.append(int(theta))
     print(name)
     print('Pred : ',result)
     print('Label : ',[theta, action.value[1], action.value[2]])
@@ -70,3 +78,15 @@ print('Accuracy of position : ',(1 - dis_count/len(f.keys())))
 print('Accuracy of theta : ',(1 - theta_count/len(f.keys())))
 file.write(str((1 - dis_count/len(f.keys())))+'/'+str((1 - theta_count/len(f.keys()))))
 file.close()
+
+matrix = np.zeros((4,4))
+for i in range(len(angle_pred)):
+    pred = angle.index(angle_pred[i])
+    label = angle.index(angle_label[i])
+    matrix[pred, label] += 1
+
+print('     90 -45 0 45')
+print(' 90', matrix[0])
+print('-45', matrix[1])
+print('  0', matrix[2])
+print(' 45', matrix[3])
