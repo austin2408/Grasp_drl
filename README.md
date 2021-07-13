@@ -6,15 +6,15 @@ Here is the work to use DQN to predict a "grasping action" by Pytorch .
 
 ## Train
 ```bash
-$ python3 offline.py"
+$ python3 offline.py
 ```
 
 ## Test
 ```bash
-$ python3 test.py"
+$ python3 test.py
 ```
 
 ## Evaluation
 ```bash
-$ python3 evaluation.py"
+$ python3 evaluation.py
 ```
