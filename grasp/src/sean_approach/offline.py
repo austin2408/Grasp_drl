@@ -65,7 +65,7 @@ def get_action_info(pixel_index):
 
 class Offline_training():
     def __init__(self, args):
-        hdf5_path = args.save_folder+'/datasets/Logger05.hdf5'
+        hdf5_path = args.save_folder+'/datasets/Logger05_filter7_v2.hdf5'
         f = h5py.File(hdf5_path, "r")
         args.memory_size = len(f.keys())
 
@@ -157,9 +157,9 @@ class Offline_training():
             if (i+1) % args.updating_freq == 0:
                 self.trainer.target_net.load_state_dict(self.trainer.behavior_net.state_dict())
             
-            print('Epoch : ', i+1, ' | Loss : ', sum(loss_list), ' S/F : ', record/10)
+            print('Epoch : ', i+1, ' | Loss : ', sum(loss_list), ' S/F : ', record/args.mini_batch_size)
             wandb.log({"loss mean": sum(loss_list)})
-            wandb.log({"Success Sample Rate": record/10})
+            wandb.log({"Success Sample Rate": record/args.mini_batch_size})
 
 if __name__ == "__main__":
 

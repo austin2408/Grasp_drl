@@ -1,3 +1,4 @@
+from numpy.lib.npyio import save
 from scipy import ndimage
 import scipy.misc
 import numpy as np
@@ -24,18 +25,20 @@ args = parser.parse_args()
 num = str(args.idx)
 
 path = os.getcwd()
-color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
-color = cv2.resize(color,(224,224))
-depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
-
-# color = cv2.imread('/home/austin/DataSet/grasp_drl/Datasets_test/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+# color = cv2.imread('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
 # color = cv2.resize(color,(224,224))
-# depth = np.load('/home/austin/DataSet/grasp_drl/Datasets_test/episode_'+num+'/depth/depth_'+num+'_0.npy')
+# depth = np.load('/home/austin/DataSet/grasp_drl/datasets/episode_'+num+'/depth/depth_'+num+'_0.npy')
+
+color = cv2.imread('/home/austin/DataSet/grasp_drl/Datasets_test/episode_'+num+'/rgb/rgb_'+num+'_0.jpg')
+color = cv2.resize(color,(224,224))
+depth = np.load('/home/austin/DataSet/grasp_drl/Datasets_test/episode_'+num+'/depth/depth_'+num+'_0.npy')
 # size = color.shape[0]
+
+# depth[depth>1000] = 0
 
 net = reinforcement_net(use_cuda=True)
 
-model_name = path+'/model/behavior_500_0.0002946976572275162.pth'
+model_name = path+'/model/behavior_half_v3_2_1000.pth'
 net.load_state_dict(torch.load(model_name))
 net = net.cuda().eval()
 
@@ -63,4 +66,4 @@ tool_1 = prediction[1][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cp
 tool_2 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy() 
 tool_3 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
 
-plot_figures([tool_0, tool_1, tool_2, tool_3], color, depth, show=True)
+plot_figures([tool_0, tool_1, tool_2, tool_3], color, depth, show=True, save=True)
