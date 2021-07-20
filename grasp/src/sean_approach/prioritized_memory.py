@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import pickle
-from SumTree import SumTree
+from .SumTree import SumTree
 
 # Revised from: https://github.com/rlcode/per and https://github.com/MorvanZhou/Reinforcement-learning-with-tensorflow/blob/master/contents/5.2_Prioritized_Replay_DQN/RL_brain.py
 
