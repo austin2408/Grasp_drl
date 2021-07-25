@@ -74,7 +74,7 @@ class DRL_Predict():
         pose_msgs = HandObjectPose()
 
         # Ros image to cv2
-        Color_ = self.bridge.compressed_imgmsg_to_cv2(Color, "bgr8")
+        Color = self.bridge.compressed_imgmsg_to_cv2(Color, "bgr8")
         Depth = self.bridge.imgmsg_to_cv2(Depth, "16UC1")
         Color = cv2.resize(Color, (224,224))
         Depth = cv2.resize(Depth, (224,224))
@@ -95,11 +95,11 @@ class DRL_Predict():
         result = plot_figures([tool_0, tool_1, tool_2, tool_3], Color, Depth)
         
         # ================= Get Gripping Point ================== 
-        x = result[2]
-        y = result[1]
+        x = result[2] 
+        y = result[1] 
         z = Depth[y, x]/1000
 
-        grasp_point_x, grasp_point_y, grasp_point_z = self.getXYZ(x , y, z)
+        grasp_point_x, grasp_point_y, grasp_point_z = self.getXYZ(x * 2.857, y * 2.14285, z)
         pose_msgs.pose.position.x = grasp_point_x
         pose_msgs.pose.position.y = grasp_point_y
         pose_msgs.pose.position.z = grasp_point_z

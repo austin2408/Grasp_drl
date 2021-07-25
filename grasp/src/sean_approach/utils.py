@@ -41,61 +41,62 @@ def vis_affordance(predictions):
 	return heatmap
 
 def plot_figures(tool, color, depth, show=False, save=False):
-    combine = []
-    tool_cmap = []
-    tt = []
-    i = 0
-    max_ = []
-    pos = []
-    theta_ = [90, -45, 0, 45]
-    for object in tool:
-        tool_cmap_ = vis_affordance(object)
-        combine_ = cv2.addWeighted(color, 1.0, tool_cmap_, 0.8, 0.0)
-        best = np.where(object == np.max(object))
-        maxx = np.max(object)
-        u, v = best[1][0], best[0][0]
-        pos.append([u, v])
-        combine_ = cv2.circle(combine_, (u, v), 3, (0, 0, 0), 2)
-        tt_ = color.copy()
-        tool_cmap.append(tool_cmap_)
-        combine.append(combine_)
-        tt.append(tt_)
-        # print('angle : ', theta_[i], ' ',(u, v), ' max : ',maxx)
-        max_.append(maxx)
-        i += 1
+	combine = []
+	tool_cmap = []
+	tt = []
+	i = 0
+	max_ = []
+	pos = []
+	# theta_ = [90, -45, 0, 45]
+	theta_ = [90, 45, 0, -45]
+	for object in tool:
+		tool_cmap_ = vis_affordance(object)
+		combine_ = cv2.addWeighted(color, 1.0, tool_cmap_, 0.8, 0.0)
+		best = np.where(object == np.max(object))
+		maxx = np.max(object)
+		u, v = best[1][0], best[0][0]
+		pos.append([u, v])
+		combine_ = cv2.circle(combine_, (u, v), 3, (0, 0, 0), 2)
+		tt_ = color.copy()
+		tool_cmap.append(tool_cmap_)
+		combine.append(combine_)
+		tt.append(tt_)
+		# print('angle : ', theta_[i], ' ',(u, v), ' max : ',maxx)
+		max_.append(maxx)
+		i += 1
 
-    Max = max(max_)
-    angle = theta_[max_.index(Max)]
-    positions = pos[max_.index(Max)]
-    if show:
-        f, axarr = plt.subplots(2,5)
-        plt.suptitle('Result : Angle : '+str(angle)+' Position : '+str(positions))
-        axarr[0][0].set_title('color and depth')
-        axarr[0][0].imshow(tt[0][:,:,[2,1,0]])
-        axarr[1][0].imshow(depth)
+	Max = max(max_)
+	angle = theta_[max_.index(Max)]
+	positions = pos[max_.index(Max)]
+	if show:
+		f, axarr = plt.subplots(2,5)
+		plt.suptitle('Result : Angle : '+str(angle)+' Position : '+str(positions))
+		axarr[0][0].set_title('color and depth')
+		axarr[0][0].imshow(tt[0][:,:,[2,1,0]])
+		axarr[1][0].imshow(depth)
 
-        axarr[0][1].set_title('90')
-        axarr[0][1].imshow(combine[0][:,:,::-1])
-        axarr[1][1].imshow(tool_cmap[0][:,:,[2,1,0]])
+		axarr[0][1].set_title('90')
+		axarr[0][1].imshow(combine[0][:,:,::-1])
+		axarr[1][1].imshow(tool_cmap[0][:,:,[2,1,0]])
 
 
-        axarr[0][2].set_title('-45')
-        axarr[0][2].imshow(combine[1][:,:,::-1])
-        axarr[1][2].imshow(tool_cmap[1][:,:,[2,1,0]])
+		axarr[0][2].set_title('-45')
+		axarr[0][2].imshow(combine[1][:,:,::-1])
+		axarr[1][2].imshow(tool_cmap[1][:,:,[2,1,0]])
 
-        axarr[0][3].set_title('0')
-        axarr[0][3].imshow(combine[2][:,:,::-1])
-        axarr[1][3].imshow(tool_cmap[2][:,:,[2,1,0]])
+		axarr[0][3].set_title('0')
+		axarr[0][3].imshow(combine[2][:,:,::-1])
+		axarr[1][3].imshow(tool_cmap[2][:,:,[2,1,0]])
 
-        axarr[0][4].set_title('45')
-        axarr[0][4].imshow(combine[3][:,:,::-1])
-        axarr[1][4].imshow(tool_cmap[3][:,:,[2,1,0]])
+		axarr[0][4].set_title('45')
+		axarr[0][4].imshow(combine[3][:,:,::-1])
+		axarr[1][4].imshow(tool_cmap[3][:,:,[2,1,0]])
 
-        plt.show()
-    if save:
-        plt.savefig(path+'/result/sample.png', dpi=300)
+		plt.show()
+	if save:
+		plt.savefig(path+'/result/sample.png', dpi=300)
 
-    return [angle, positions[1], positions[0]]
+	return [angle, positions[1], positions[0]]
 
 
 def preprocessing(color, depth):

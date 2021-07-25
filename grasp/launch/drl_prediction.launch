@@ -1,0 +1,3 @@
+<launch>
+      <node pkg="grasp" type="ros_grasp_drl.py" name="DRL_prediction" output="screen"/>
+  </launch>

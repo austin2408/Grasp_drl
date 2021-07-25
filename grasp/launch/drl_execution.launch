@@ -1,0 +1,6 @@
+<launch>
+  
+    <node name="DRL_stragety" pkg="grasp" type="DRL_stragety.py" respawn="false" output="screen">
+    </node>
+  
+  </launch>

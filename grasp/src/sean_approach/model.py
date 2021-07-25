@@ -44,8 +44,8 @@ class reinforcement_net(nn.Module):
         self.num_rotations = num_rotations
         
         # Initialize Densenet pretrained on ImageNet
-        self.grasp_color_feat_extractor = torchvision.models.densenet121(pretrained = True)
-        self.grasp_depth_feat_extractor = torchvision.models.densenet121(pretrained = True)
+        self.grasp_color_feat_extractor = torchvision.models.densenet.densenet121(pretrained = True)
+        self.grasp_depth_feat_extractor = torchvision.models.densenet.densenet121(pretrained = True)
         # We don't need there fully connected layers
         del self.grasp_color_feat_extractor.classifier,  self.grasp_depth_feat_extractor.classifier
         
