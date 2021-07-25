@@ -92,7 +92,7 @@ class DRL_Predict():
         tool_2 = prediction[2][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
         tool_3 = prediction[3][0, 0, pad//2:size+pad//2, pad//2:size+pad//2].detach().cpu().numpy()
 
-        result = plot_figures([tool_0, tool_1, tool_2, tool_3], Color, Depth)
+        result = plot_figures([tool_0, tool_1, tool_2, tool_3], Color, Depth, ros=True)
         
         # ================= Get Gripping Point ================== 
         x = result[2] 

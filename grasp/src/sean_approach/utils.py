@@ -40,15 +40,15 @@ def vis_affordance(predictions):
 	heatmap = cv2.applyColorMap(tmp, cv2.COLORMAP_JET)
 	return heatmap
 
-def plot_figures(tool, color, depth, show=False, save=False):
+def plot_figures(tool, color, depth, show=False, save=False, ros=False):
 	combine = []
 	tool_cmap = []
 	tt = []
 	i = 0
 	max_ = []
 	pos = []
-	# theta_ = [90, -45, 0, 45]
-	theta_ = [90, 45, 0, -45]
+	theta_ = [90, -45, 0, 45]
+	theta_ros = [90, 45, 0, -45]
 	for object in tool:
 		tool_cmap_ = vis_affordance(object)
 		combine_ = cv2.addWeighted(color, 1.0, tool_cmap_, 0.8, 0.0)
@@ -66,7 +66,10 @@ def plot_figures(tool, color, depth, show=False, save=False):
 		i += 1
 
 	Max = max(max_)
-	angle = theta_[max_.index(Max)]
+	if ros:
+		angle = theta_ros[max_.index(Max)]
+	else:
+		angle = theta_[max_.index(Max)]
 	positions = pos[max_.index(Max)]
 	if show:
 		f, axarr = plt.subplots(2,5)
