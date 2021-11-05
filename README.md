@@ -1,6 +1,6 @@
 # Grasp_drl
 
-Here is the work to use DQN to predict a "grasping action" by Pytorch .
+Here is the work to use DDQN to predict a "grasping action" by Pytorch .
 
 ![Teaser](grasp/src/sean_approach/result/half_v3_2/sample_7.png)
 
